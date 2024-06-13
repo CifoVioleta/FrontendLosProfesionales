@@ -7,13 +7,14 @@ import TabPanel from "@mui/lab/TabPanel";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
-export default function LabTabs({ userType }) {
+export default function LabTabs({ userRole, setCurrentTab, setSubmenuValue }) {
   const [value, setValue] = React.useState("1");
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [submenuValue, setSubmenuValue] = React.useState("Todos");
+  const [submenuValue, setSubmenuValueLocal] = React.useState("Todos");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    setCurrentTab(newValue); // Actualiza el estado del tab seleccionado en AuthNavTabs
   };
 
   const handleMenuOpen = (event) => {
@@ -25,8 +26,10 @@ export default function LabTabs({ userType }) {
   };
 
   const handleSubmenuClick = (value) => {
-    setSubmenuValue(value);
+    setSubmenuValueLocal(value);
+    setSubmenuValue(value); // Actualiza el estado del submenú en AuthNavTabs
     setValue("3"); // Ensure the third tab (Servicios) is selected
+    setCurrentTab("3"); // Actualiza el estado del tab seleccionado en AuthNavTabs
     handleMenuClose();
   };
 
@@ -55,13 +58,7 @@ export default function LabTabs({ userType }) {
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               <Tab label="Editar perfil" value="1" />
               <Tab label="Solicitudes" value="2" />
-              <Tab
-                label="Servicios"
-                value="3"
-                aria-controls="servicios-menu"
-                aria-haspopup="true"
-                onClick={handleMenuOpen}
-              />
+              <Tab label="Servicios" value="3" aria-controls="servicios-menu" aria-haspopup="true" onClick={handleMenuOpen} />
               <Tab label="Proyectos" value="4" />
               <Tab label="Historial" value="5" />
             </TabList>
@@ -85,9 +82,7 @@ export default function LabTabs({ userType }) {
   const renderProfesionalTabPanels = () => {
     return (
       <>
-        <TabPanel value="1">
-          Contenido de Editar perfil para Profesional
-        </TabPanel>
+        <TabPanel value="1">Contenido de Editar perfil para Profesional</TabPanel>
         <TabPanel value="2">Contenido de Solicitudes para Profesional</TabPanel>
         <TabPanel value="3">{submenuValue}</TabPanel>
         <TabPanel value="4">Contenido de Proyectos para Profesional</TabPanel>
@@ -101,14 +96,9 @@ export default function LabTabs({ userType }) {
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            {userType === "empleador"
-              ? renderEmpleadorTabs()
-              : renderProfesionalTabs()}
+            {userRole === "empleador" ? renderEmpleadorTabs() : renderProfesionalTabs()}
           </TabList>
         </Box>
-        {userType === "empleador"
-          ? renderEmpleadorTabPanels()
-          : renderProfesionalTabPanels()}
       </TabContext>
       <Menu
         id="servicios-menu"
@@ -118,15 +108,9 @@ export default function LabTabs({ userType }) {
         onClose={handleMenuClose}
       >
         <MenuItem onClick={() => handleSubmenuClick("Todos")}>Todos</MenuItem>
-        <MenuItem onClick={() => handleSubmenuClick("Activos")}>
-          Activos
-        </MenuItem>
-        <MenuItem onClick={() => handleSubmenuClick("Inactivos")}>
-          Inactivos
-        </MenuItem>
-        <MenuItem onClick={() => handleSubmenuClick("Añadir servicio")}>
-          Añadir servicio
-        </MenuItem>
+        <MenuItem onClick={() => handleSubmenuClick("Activos")}>Activos</MenuItem>
+        <MenuItem onClick={() => handleSubmenuClick("Inactivos")}>Inactivos</MenuItem>
+        <MenuItem onClick={() => handleSubmenuClick("Añadir servicio")}>Añadir servicio</MenuItem>
       </Menu>
     </Box>
   );

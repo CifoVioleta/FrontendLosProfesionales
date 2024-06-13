@@ -16,6 +16,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 //import ErrorMessage from "./ErrorMessage.jsx";
 import FieldValidator from "./FieldValidator.jsx";
+import ServiceForm from "../ServiceForm.jsx";
 
 const theme = createTheme();
 
@@ -46,8 +47,6 @@ export default function Register() {
     setUserType(event.target.value);
     setFormData({
       ...formData,
-      companyName: "",
-      cif: "",
       serviceType: "",
       serviceName: "",
       serviceDescription: "",
@@ -76,20 +75,13 @@ export default function Register() {
     if (data.password !== data.verifyPassword)
       errors.verifyPassword = "Las contraseñas no coinciden";
 
-    if (userType === "Empleador") {
-      if (!data.companyName)
-        errors.companyName = "El nombre de la empresa es requerido";
-      if (!data.cif) errors.cif = "El CIF es requerido";
-    } else if (userType === "Profesional") {
+    if (userType === "Profesional") {
       if (!data.serviceType)
         errors.serviceType = "El tipo de servicio es requerido";
       if (!data.serviceName)
         errors.serviceName = "El nombre del servicio es requerido";
       if (!data.serviceDescription)
         errors.serviceDescription = "La descripción del servicio es requerida";
-      if (!data.companyName)
-        errors.companyName = "El nombre de la empresa es requerido";
-      if (!data.cif) errors.cif = "El CIF es requerido";
     }
 
     return errors;
@@ -230,108 +222,53 @@ export default function Register() {
                       onChange={handleChange}
                     />
                   </Grid>
-                  {userType === "Empleador" && (
-                    <>
+                </Grid>
+                {userType === "Profesional" && (
+                  <fieldset
+                    style={{
+                      border: "1px solid #ccc",
+                      borderRadius: "5px",
+                      padding: "20px",
+                      marginTop: "15px",
+                    }}
+                  >
+                    <legend>Añadir servicio</legend>
+                    <Grid container spacing={2}>
                       <Grid item xs={12}>
-                        <FieldValidator
-                          error={!!errors.companyName}
-                          helperText={errors.companyName}
-                          fullWidth
-                          id="companyName"
-                          label="Nombre de la Empresa"
-                          name="companyName"
-                          value={formData.companyName}
-                          onChange={handleChange}
+                        <ServiceForm
+                          formData={formData}
+                          handleChange={handleChange}
+                          errors={errors}
                         />
                       </Grid>
-                      <Grid item xs={12}>
-                        <FieldValidator
-                          error={!!errors.cif}
-                          helperText={errors.cif}
-                          fullWidth
-                          id="cif"
-                          label="CIF"
-                          name="cif"
-                          value={formData.cif}
-                          onChange={handleChange}
-                        />
-                      </Grid>
-                    </>
-                  )}
-                  {userType === "Profesional" && (
-                    <>
-                      <Grid item xs={12}>
-                        <FormControl fullWidth>
-                          <InputLabel id="service-type-label">
-                            Tipo de Servicio
-                          </InputLabel>
-                          <Select
-                            labelId="service-type-label"
-                            id="serviceType"
-                            value={formData.serviceType}
-                            label="Tipo de Servicio"
-                            onChange={handleChange}
-                            name="serviceType"
-                            fullWidth
-                          >
-                            <MenuItem value="Frontend">Frontend</MenuItem>
-                            <MenuItem value="Backend">Backend</MenuItem>
-                            <MenuItem value="Devops">Devops</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <FieldValidator
-                          error={!!errors.serviceName}
-                          helperText={errors.serviceName}
-                          required
-                          fullWidth
-                          id="serviceName"
-                          label="Nombre del Servicio"
-                          name="serviceName"
-                          value={formData.serviceName}
-                          onChange={handleChange}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <FieldValidator
-                          error={!!errors.serviceDescription}
-                          helperText={errors.serviceDescription}
-                          required
-                          fullWidth
-                          id="serviceDescription"
-                          label="Descripción del Servicio"
-                          name="serviceDescription"
-                          value={formData.serviceDescription}
-                          onChange={handleChange}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <FieldValidator
-                          error={!!errors.companyName}
-                          helperText={errors.companyName}
-                          fullWidth
-                          id="companyName"
-                          label="Nombre de la Empresa"
-                          name="companyName"
-                          value={formData.companyName}
-                          onChange={handleChange}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <FieldValidator
-                          error={!!errors.cif}
-                          helperText={errors.cif}
-                          fullWidth
-                          id="cif"
-                          label="CIF"
-                          name="cif"
-                          value={formData.cif}
-                          onChange={handleChange}
-                        />
-                      </Grid>
-                    </>
-                  )}
+                    </Grid>
+                  </fieldset>
+                )}
+                <Grid container spacing={2} sx={{ mt: 2 }}>
+                  <Grid item xs={12}>
+                    <FieldValidator
+                      error={!!errors.companyName}
+                      helperText={errors.companyName}
+                      fullWidth
+                      id="companyName"
+                      label="Nombre de la Empresa"
+                      name="companyName"
+                      value={formData.companyName}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FieldValidator
+                      error={!!errors.cif}
+                      helperText={errors.cif}
+                      fullWidth
+                      id="cif"
+                      label="CIF"
+                      name="cif"
+                      value={formData.cif}
+                      onChange={handleChange}
+                    />
+                  </Grid>
                 </Grid>
                 <Button
                   type="submit"

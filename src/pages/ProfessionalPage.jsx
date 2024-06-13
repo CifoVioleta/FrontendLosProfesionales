@@ -1,15 +1,10 @@
-import NavTabs from "../components/header/NavTabs";
-import Box from "@mui/material/Box";
+import AuthNavTabs from "../components/navtabhome/AuthNavTabs";
 
-function AuthNavTabs() {
-  // Simula el tipo de usuario; puede ser 'empleador' o 'profesional'
-  const userRole = "profesional";
-
+function ProfessionalPageView() {
+  
   return (
-    <Box sx={{ p: 2 }}>
-      <NavTabs userRole={userRole} />
-    </Box>
+    <AuthNavTabs />
   );
 }
 
-export default AuthNavTabs;
+export default ProfessionalPageView;
