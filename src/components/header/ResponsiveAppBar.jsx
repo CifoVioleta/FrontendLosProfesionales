@@ -1,4 +1,6 @@
+import PropTypes from 'prop-types';
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -18,10 +20,11 @@ import DialogContent from "@mui/material/DialogContent";
 import Register from "./avatar/Register.jsx";
 import Login from "./avatar/Login.jsx";
 
+
 const pages = ["Servicios", "Profesionales"];
 const appBarColor = "#1976d2"; // Color azul original
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar({ onLogin }) {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -29,6 +32,7 @@ function ResponsiveAppBar() {
   const [nickname, setNickname] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogContent, setDialogContent] = useState(null);
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -50,6 +54,7 @@ function ResponsiveAppBar() {
     setIsLoggedIn(true);
     setUserType(type);
     setNickname(userNickname);
+    onLogin(type);
   };
 
   const handleLogout = () => {
@@ -69,139 +74,41 @@ function ResponsiveAppBar() {
     setDialogContent(null);
   };
 
+  const handleMenuAction = (section) => {
+    setAnchorElUser(null);
+    navigate(`/user/${section}`);
+  };
+
   let settings = [];
 
   if (isLoggedIn) {
     if (userType === "Empleador") {
       settings = [
-        {
-          name: "Editar perfil",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center" color={appBarColor}>Editar perfil</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Solicitudes",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center" color={appBarColor}>Solicitudes</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Servicios",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center" color={appBarColor}>Servicios</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Historial",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center" color={appBarColor}>Historial</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Cerrar sesión",
-          component: (
-            <MenuItem
-              onClick={() => {
-                handleCloseUserMenu();
-                handleLogout();
-              }}
-            >
-              <Typography textAlign="center" color={appBarColor}>Cerrar sesión</Typography>
-            </MenuItem>
-          ),
-        },
+        { name: "Editar perfil", action: () => handleMenuAction("edit-profile") },
+        { name: "Solicitudes", action: () => handleMenuAction("requests") },
+        { name: "Servicios", action: () => handleMenuAction("services") },
+        { name: "Historial", action: () => handleMenuAction("history") },
+        { name: "Cerrar sesión", action: handleLogout },
       ];
     } else if (userType === "Profesional") {
       settings = [
-        {
-          name: "Editar perfil",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center" color={appBarColor}>Editar perfil</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Solicitudes",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center" color={appBarColor}>Solicitudes</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Servicios",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center" color={appBarColor}>Servicios</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Proyectos",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center" color={appBarColor}>Proyectos</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Historial",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center" color={appBarColor}>Historial</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Cerrar sesión",
-          component: (
-            <MenuItem
-              onClick={() => {
-                handleCloseUserMenu();
-                handleLogout();
-              }}
-            >
-              <Typography textAlign="center" color={appBarColor}>Cerrar sesión</Typography>
-            </MenuItem>
-          ),
-        },
+        { name: "Editar perfil", action: () => handleMenuAction("edit-profile") },
+        { name: "Solicitudes", action: () => handleMenuAction("requests") },
+        { name: "Servicios", action: () => handleMenuAction("services") },
+        { name: "Proyectos", action: () => handleMenuAction("projects") },
+        { name: "Historial", action: () => handleMenuAction("history") },
+        { name: "Cerrar sesión", action: handleLogout },
       ];
     }
   } else {
     settings = [
-      {
-        name: "Registrarse",
-        component: (
-          <MenuItem onClick={() => handleDialogOpen(<Register />)}>
-            <Typography textAlign="center" color={appBarColor}>Registrarse</Typography>
-          </MenuItem>
-        ),
-      },
-      {
-        name: "Iniciar sesión",
-        component: (
-          <MenuItem
-            onClick={() => handleDialogOpen(<Login onLogin={handleLogin} />)}
-          >
-            <Typography textAlign="center" color={appBarColor}>Iniciar sesión</Typography>
-          </MenuItem>
-        ),
-      },
+      { name: "Registrarse", action: () => handleDialogOpen(<Register />) },
+      { name: "Iniciar sesión", action: () => handleDialogOpen(<Login onLogin={handleLogin} />) },
     ];
   }
 
   return (
-    <AppBar position="static" sx={{ bgcolor: "transparent", color: appBarColor, boxShadow: 'none' }}> {/* Fondo transparente, texto azul, sin sombra */}
+    <AppBar position="static" sx={{ bgcolor: "transparent", color: appBarColor, boxShadow: 'none' }}>
       <Container maxWidth="xl" sx={{ py: 2 }}>
         <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1, color: appBarColor }} />
@@ -209,7 +116,7 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component="a"
-            href="#"
+            href="#HomePage"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -264,7 +171,7 @@ function ResponsiveAppBar() {
             variant="h5"
             noWrap
             component="a"
-            href="#"
+            href="#HomePage"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -318,8 +225,8 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                  {setting.component}
+                <MenuItem key={setting.name} onClick={setting.action}>
+                  <Typography textAlign="center" color={appBarColor}>{setting.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -340,5 +247,9 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
+
+ResponsiveAppBar.propTypes = {
+  onLogin: PropTypes.func.isRequired,
+};
 
 export default ResponsiveAppBar;

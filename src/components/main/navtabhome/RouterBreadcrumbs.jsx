@@ -5,14 +5,14 @@ import { Link as RouterLink, useLocation } from "react-router-dom";
 
 const breadcrumbNameMap = {
   "editar-perfil": "Editar perfil",
-  solicitudes: "Solicitudes",
-  servicios: "Servicios",
+  "solicitudes": "Solicitudes",
+  "servicios": "Servicios",
   "servicios/todos": "Todos",
   "servicios/activos": "Activos",
   "servicios/inactivos": "Inactivos",
   "servicios/nuevo": "Añadir servicio",
-  proyectos: "Proyectos",
-  historial: "Historial",
+  "proyectos": "Proyectos",
+  "historial": "Historial",
 };
 
 function LinkRouter(props) {

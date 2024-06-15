@@ -6,6 +6,13 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import EditProfile from "../mainUser/editProfile/EditProfile";
+import Projects from "../mainUser/projects/Projects";
+import RecordUser from "../mainUser/record/RecordUser";
+import RequestUserView from "../mainUser/request/RequestUserView";
+import ServicesEmploye from "../mainUser/services/ServicesEmploye";
+import ServicesProfessional from "../mainUser/services/SevicesProfessional";
+
 
 export default function LabTabs({ userRole, setCurrentTab, setSubmenuValue }) {
   const [value, setValue] = React.useState("1");
@@ -55,7 +62,7 @@ export default function LabTabs({ userRole, setCurrentTab, setSubmenuValue }) {
       <Box sx={{ width: "100%", typography: "body1" }}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <TabList onChange={handleChange} aria-label="lab API tabs">
               <Tab label="Editar perfil" value="1" />
               <Tab label="Solicitudes" value="2" />
               <Tab label="Servicios" value="3" aria-controls="servicios-menu" aria-haspopup="true" onClick={handleMenuOpen} />
@@ -68,37 +75,50 @@ export default function LabTabs({ userRole, setCurrentTab, setSubmenuValue }) {
     );
   };
 
-  const renderEmpleadorTabPanels = () => {
-    return (
-      <>
-        <TabPanel value="1">Contenido de Editar perfil para Empleador</TabPanel>
-        <TabPanel value="2">Contenido de Solicitudes para Empleador</TabPanel>
-        <TabPanel value="3">Contenido de Servicios para Empleador</TabPanel>
-        <TabPanel value="4">Contenido de Historial para Empleador</TabPanel>
-      </>
-    );
-  };
-
-  const renderProfesionalTabPanels = () => {
-    return (
-      <>
-        <TabPanel value="1">Contenido de Editar perfil para Profesional</TabPanel>
-        <TabPanel value="2">Contenido de Solicitudes para Profesional</TabPanel>
-        <TabPanel value="3">{submenuValue}</TabPanel>
-        <TabPanel value="4">Contenido de Proyectos para Profesional</TabPanel>
-        <TabPanel value="5">Contenido de Historial para Profesional</TabPanel>
-      </>
-    );
-  };
-
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            {userRole === "empleador" ? renderEmpleadorTabs() : renderProfesionalTabs()}
+            {userRole === "empleador"
+              ? renderEmpleadorTabs()
+              : renderProfesionalTabs()}
           </TabList>
         </Box>
+        {userRole === "empleador" ? (
+          <>
+            <TabPanel value="1">
+              <EditProfile />
+            </TabPanel>
+            <TabPanel value="2">
+              <RequestUserView />
+            </TabPanel>
+            <TabPanel value="3">
+              <ServicesEmploye />
+            </TabPanel>
+            <TabPanel value="4">
+              <RecordUser />
+            </TabPanel>
+          </>
+        ) : (
+          <>
+            <TabPanel value="1">
+              <EditProfile />
+            </TabPanel>
+            <TabPanel value="2">
+              <RequestUserView />
+            </TabPanel>
+            <TabPanel value="3">
+              <ServicesProfessional submenuValue={submenuValue} />
+            </TabPanel>
+            <TabPanel value="4">
+              <Projects />
+            </TabPanel>
+            <TabPanel value="5">
+              <RecordUser />
+            </TabPanel>
+          </>
+        )}
       </TabContext>
       <Menu
         id="servicios-menu"
@@ -108,9 +128,15 @@ export default function LabTabs({ userRole, setCurrentTab, setSubmenuValue }) {
         onClose={handleMenuClose}
       >
         <MenuItem onClick={() => handleSubmenuClick("Todos")}>Todos</MenuItem>
-        <MenuItem onClick={() => handleSubmenuClick("Activos")}>Activos</MenuItem>
-        <MenuItem onClick={() => handleSubmenuClick("Inactivos")}>Inactivos</MenuItem>
-        <MenuItem onClick={() => handleSubmenuClick("Añadir servicio")}>Añadir servicio</MenuItem>
+        <MenuItem onClick={() => handleSubmenuClick("Activos")}>
+          Activos
+        </MenuItem>
+        <MenuItem onClick={() => handleSubmenuClick("Inactivos")}>
+          Inactivos
+        </MenuItem>
+        <MenuItem onClick={() => handleSubmenuClick("Añadir servicio")}>
+          Añadir servicio
+        </MenuItem>
       </Menu>
     </Box>
   );
