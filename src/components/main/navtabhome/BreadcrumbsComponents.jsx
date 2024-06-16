@@ -2,7 +2,7 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
-import HomePage from "../../../pages/HomePage";
+import HomePage from "../../../pages/HomePage.jsx";
 
 export default function BreadcrumbsComponent({ currentTab, submenuValue }) {
   const breadcrumbNameMap = {

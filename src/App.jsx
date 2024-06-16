@@ -1,31 +1,35 @@
-
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Container from '@mui/material/Container';
 import ResponsiveAppBar from "./components/header/ResponsiveAppBar.jsx";
 import Footer from "./components/footer/Footer.jsx";
-import { UserProvider } from './middleware/UserContext.jsx';
-import { DialogProvider } from './middleware/DialogContext.jsx';
+import { UserProvider } from "./middleware/UserContext.jsx";
+import { DialogProvider } from "./middleware/DialogContext.jsx";
 import HomePage from "./pages/HomePage.jsx";
+import UserPage from "./pages/UserPage.jsx";
 
-const App = () => {
+// Define la función onLogin
+const handleLogin = (userData, loginUser) => {
+  loginUser(userData); // Llama a la función de login del contexto del usuario
+  console.log("User logged in");
+};
+
+function App() {
   return (
-    <UserProvider>
-      <DialogProvider>
-        <Router>
-            <ResponsiveAppBar />
-            <Container>
-            <Routes>
-            <Route path="/" element={
-                    <>
-                    <HomePage/>
-                    </>
-                } />
-            </Routes>
-            </Container>
-            <Footer />
-        </Router>
-      </DialogProvider>    
-    </UserProvider>
+    <Router>
+      <UserProvider>
+        <DialogProvider>
+          <UserContext.Consumer>
+            {({ loginUser }) => (
+              <ResponsiveAppBar onLogin={(userData) => handleLogin(userData, loginUser)} />
+            )}
+          </UserContext.Consumer>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/user" element={<UserPage />} />
+          </Routes>
+          <Footer />
+        </DialogProvider>
+      </UserProvider>
+    </Router>
   );
 }
 

@@ -1,13 +1,13 @@
 import { useParams } from "react-router-dom";
 import PropTypes from 'prop-types';
-import AuthNavTabs from "../components/main/navtabhome/AuthNavTabs.jsx";
+import AuthNavTabs from '../components/main/navtabhome/AuthNavTabs';
 
 const UserPage = ({ userType }) => {
-  const { section } = useParams();
+  const { id } = useParams();
 
   return (
     <div>
-      <AuthNavTabs selectedTab={section} userType={userType} />
+      <AuthNavTabs selectedTab={id} userType={userType} />
     </div>
   );
 };
