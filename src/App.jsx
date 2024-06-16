@@ -7,9 +7,8 @@ import HomePage from "./pages/HomePage.jsx";
 import UserPage from "./pages/UserPage.jsx";
 
 // Define la función onLogin
-const handleLogin = (userData, loginUser) => {
-  loginUser(userData); // Llama a la función de login del contexto del usuario
-  console.log("User logged in");
+const handleLogin = (userData) => {
+  console.log("User logged in", userData);
 };
 
 function App() {
@@ -17,16 +16,12 @@ function App() {
     <Router>
       <UserProvider>
         <DialogProvider>
-          <UserContext.Consumer>
-            {({ loginUser }) => (
-              <ResponsiveAppBar onLogin={(userData) => handleLogin(userData, loginUser)} />
-            )}
-          </UserContext.Consumer>
+          <ResponsiveAppBar onLogin={handleLogin} />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/user" element={<UserPage />} />
           </Routes>
-          <Footer />
+          <Footer/>
         </DialogProvider>
       </UserProvider>
     </Router>

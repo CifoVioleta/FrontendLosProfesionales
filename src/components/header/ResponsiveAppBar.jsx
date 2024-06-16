@@ -1,23 +1,36 @@
-import { useState, useContext } from 'react';
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, MenuItem, Button, Tooltip, Avatar, Dialog, DialogActions, DialogContent, Container } from '@mui/material';
-import { Menu as MenuIcon } from '@mui/icons-material';
-import AdbIcon from '@mui/icons-material/Adb';
-import Register from './avatar/Register';
-import Login from './avatar/Login';
-import ControlledAccordions from './ControlledAccordions';
-import { DialogProvider, DialogContext } from '../../middleware/DialogContext';
-import PropTypes from 'prop-types';
-
+import React, { useState, useContext } from "react";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  MenuItem,
+  Button,
+  Tooltip,
+  Avatar,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Container
+} from "@mui/material";
+import { Menu as MenuIcon } from "@mui/icons-material";
+import AdbIcon from "@mui/icons-material/Adb";
+import Register from "./avatar/Register.jsx";
+import Login from "./avatar/Login.jsx";
+import ControlledAccordions from "../main/ControlledAccordions.jsx";
+import { DialogContext } from "../../middleware/DialogContext.jsx";
+import { UserContext } from '../../middleware/UserContext.jsx';
+import PropTypes from "prop-types";
 
 const pages = ["Servicios", "Profesionales"];
 
 function ResponsiveAppBar({ onLogin }) {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userType, setUserType] = useState(null);
-  const [nickname, setNickname] = useState(null);
   const { openDialog, dialogContent, handleDialogOpen, handleDialogClose } = useContext(DialogContext);
+  const { state, dispatch } = useContext(UserContext);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -36,25 +49,21 @@ function ResponsiveAppBar({ onLogin }) {
   };
 
   const handleLogin = (type, userNickname, userData) => {
-    setIsLoggedIn(true);
-    setUserType(type);
-    setNickname(userNickname);
+    dispatch({ type: 'LOGIN', payload: { userType: type, nickname: userNickname } });
     onLogin(userData); // Llama a la función onLogin pasada como prop
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    setUserType(null);
-    setNickname(null);
+    dispatch({ type: 'LOGOUT' });
   };
 
   let settings = [];
 
-  if (isLoggedIn) {
-    if (userType === 'Empleador') {
+  if (state.isLoggedIn) {
+    if (state.userType === "Empleador") {
       settings = [
         {
-          name: 'Editar perfil',
+          name: "Editar perfil",
           component: (
             <MenuItem onClick={handleCloseUserMenu}>
               <Typography textAlign="center">Editar perfil</Typography>
@@ -62,31 +71,31 @@ function ResponsiveAppBar({ onLogin }) {
           ),
         },
         {
-          name: 'Estado de solicitudes',
+          name: "Solicitudes",
           component: (
             <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">Estado de solicitudes</Typography>
+              <Typography textAlign="center">Solicitudes</Typography>
             </MenuItem>
           ),
         },
         {
-          name: 'Estado de servicios',
+          name: "Servicios",
           component: (
             <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">Estado de servicios</Typography>
+              <Typography textAlign="center">Servicios</Typography>
             </MenuItem>
           ),
         },
         {
-          name: 'Registro de servicios',
+          name: "Historial",
           component: (
             <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">Registro de servicios</Typography>
+              <Typography textAlign="center">Historial</Typography>
             </MenuItem>
           ),
         },
         {
-          name: 'Cerrar sesión',
+          name: "Cerrar sesión",
           component: (
             <MenuItem
               onClick={() => {
@@ -99,10 +108,10 @@ function ResponsiveAppBar({ onLogin }) {
           ),
         },
       ];
-    } else if (userType === 'Profesional') {
+    } else if (state.userType === "Profesional") {
       settings = [
         {
-          name: 'Editar perfil',
+          name: "Editar perfil",
           component: (
             <MenuItem onClick={handleCloseUserMenu}>
               <Typography textAlign="center">Editar perfil</Typography>
@@ -110,7 +119,15 @@ function ResponsiveAppBar({ onLogin }) {
           ),
         },
         {
-          name: 'Servicios',
+          name: "Solicitudes",
+          component: (
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Typography textAlign="center">Solicitudes</Typography>
+            </MenuItem>
+          ),
+        },
+        {
+          name: "Servicios",
           component: (
             <MenuItem onClick={handleCloseUserMenu}>
               <Typography textAlign="center">Servicios</Typography>
@@ -118,15 +135,23 @@ function ResponsiveAppBar({ onLogin }) {
           ),
         },
         {
-          name: 'Historial proyectos',
+          name: "Proyectos",
           component: (
             <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">Historial proyectos</Typography>
+              <Typography textAlign="center">Proyectos</Typography>
             </MenuItem>
           ),
         },
         {
-          name: 'Cerrar sesión',
+          name: "Historial",
+          component: (
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Typography textAlign="center">Historial</Typography>
+            </MenuItem>
+          ),
+        },
+        {
+          name: "Cerrar sesión",
           component: (
             <MenuItem
               onClick={() => {
@@ -143,7 +168,7 @@ function ResponsiveAppBar({ onLogin }) {
   } else {
     settings = [
       {
-        name: 'Registrarse',
+        name: "Registrarse",
         component: (
           <MenuItem onClick={() => handleDialogOpen(<Register />)}>
             <Typography textAlign="center">Registrarse</Typography>
@@ -151,7 +176,7 @@ function ResponsiveAppBar({ onLogin }) {
         ),
       },
       {
-        name: 'Iniciar sesión',
+        name: "Iniciar sesión",
         component: (
           <MenuItem
             onClick={() => handleDialogOpen(<Login onLogin={handleLogin} />)}
@@ -166,11 +191,11 @@ function ResponsiveAppBar({ onLogin }) {
   return (
     <AppBar
       position="static"
-      sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}
+      sx={{ backgroundColor: "transparent", boxShadow: "none" }}
     >
       <Container maxWidth="xl" sx={{ py: 2 }}>
-        <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+        <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
+          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -178,18 +203,18 @@ function ResponsiveAppBar({ onLogin }) {
             href="#"
             sx={{
               mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-              fontSize: { xs: '1rem', md: '1.5rem' },
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+              fontSize: { xs: "1rem", md: "1.5rem" },
             }}
           >
             PROFESIONALES
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -204,18 +229,18 @@ function ResponsiveAppBar({ onLogin }) {
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: "bottom",
+                horizontal: "left",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: 'block', md: 'none' },
+                display: { xs: "block", md: "none" },
               }}
             >
               {pages.map((page) => (
@@ -225,7 +250,7 @@ function ResponsiveAppBar({ onLogin }) {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -233,24 +258,24 @@ function ResponsiveAppBar({ onLogin }) {
             href=""
             sx={{
               mr: 2,
-              display: { xs: 'flex', md: 'none' },
+              display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-              fontSize: { xs: '1rem', md: '1.5rem' },
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+              fontSize: { xs: "1rem", md: "1.5rem" },
             }}
           >
             PROFESIONALES
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}
               </Button>
@@ -259,21 +284,33 @@ function ResponsiveAppBar({ onLogin }) {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={nickname || ''} src="/static/images/avatar/2.jpg" />
+                <Avatar alt={state.nickname || ""} src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
+            {state.isLoggedIn && (
+              <Typography
+                variant="body2"
+                sx={{
+                  fontSize: { xs: "0.8rem", md: "1rem" },
+                  color: "white",
+                  ml: 1,
+                }}
+              >
+                {state.nickname}
+              </Typography>
+            )}
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: "45px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
@@ -286,6 +323,7 @@ function ResponsiveAppBar({ onLogin }) {
             </Menu>
           </Box>
         </Toolbar>
+        <ControlledAccordions isLoggedIn={state.isLoggedIn} userType={state.userType} />
         <Dialog open={openDialog} onClose={handleDialogClose}>
           <DialogContent>{dialogContent}</DialogContent>
           <DialogActions>

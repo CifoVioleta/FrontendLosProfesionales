@@ -1,64 +1,55 @@
-import * as React from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import Register from '../header/avatar/Register.jsx';
-// Mock data
+import * as React from "react";
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Button } from '@mui/material';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import Login from "../header/avatar/Login.jsx";
+import { DialogContext } from "../../middleware/DialogContext";
+import PropTypes from "prop-types";
+
+// Mock data (esto se reemplazará con datos del backend)
 const services = [
   {
     id: 1,
-    avatar: '/static/images/avatar/1.jpg',
-    nickname: 'John Doe',
-    serviceName: 'Website Development',
-    serviceType: 'Frontend',
-    description: 'We offer high-quality frontend development services...',
+    avatar: "/static/images/avatar/1.jpg",
+    nickname: "John Doe",
+    serviceName: "Website Development",
+    serviceType: "Frontend",
+    description: "We offer high-quality frontend development services...",
   },
   {
     id: 2,
-    avatar: '/static/images/avatar/2.jpg',
-    nickname: 'Jane Smith',
-    serviceName: 'API Development',
-    serviceType: 'Backend',
-    description: 'Professional backend services for scalable APIs...',
+    avatar: "/static/images/avatar/2.jpg",
+    nickname: "Jane Smith",
+    serviceName: "API Development",
+    serviceType: "Backend",
+    description: "Professional backend services for scalable APIs...",
   },
   {
     id: 3,
-    avatar: '/static/images/avatar/3.jpg',
-    nickname: 'Alice Brown',
-    serviceName: 'Cloud Deployment',
-    serviceType: 'DevOps',
-    description: 'Efficient and scalable cloud deployment services...',
+    avatar: "/static/images/avatar/3.jpg",
+    nickname: "Alice Brown",
+    serviceName: "Cloud Deployment",
+    serviceType: "DevOps",
+    description: "Efficient and scalable cloud deployment services...",
   },
 ];
 
 export default function ControlledAccordions({ isLoggedIn, userType }) {
   const [expanded, setExpanded] = React.useState(false);
-  const [openDialog, setOpenDialog] = React.useState(false);
+  const { openDialog, dialogContent, handleDialogOpen, handleDialogClose } = React.useContext(DialogContext);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const handleDialogOpen = () => {
-    setOpenDialog(true);
-  };
-
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-  };
-
   const getButtonLabel = () => {
-    if (!isLoggedIn) return 'Contratar servicio';
-    if (userType === 'Empleador') return 'Contratar servicio';
-    if (userType === 'Profesional') return null;
+    if (!isLoggedIn) return "Contratar servicio";
+    if (userType === "Empleador") return "Contratar servicio";
+    if (userType === "Profesional") return null;
   };
 
   return (
@@ -74,10 +65,10 @@ export default function ControlledAccordions({ isLoggedIn, userType }) {
             aria-controls={`panel${index}bh-content`}
             id={`panel${index}bh-header`}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mr: 2 }}>
+            <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mr: 2 }}>
                 <Avatar alt={service.nickname} src={service.avatar} sx={{ mb: 1 }} />
-                <Typography sx={{ color: 'text.secondary' }}>
+                <Typography sx={{ color: "text.secondary" }}>
                   {service.nickname}
                 </Typography>
               </Box>
@@ -86,7 +77,7 @@ export default function ControlledAccordions({ isLoggedIn, userType }) {
                   {service.serviceName}
                 </Typography>
               </Box>
-              <Button variant="outlined" sx={{ width: '100px' }}>
+              <Button variant="outlined" sx={{ width: "100px" }}>
                 {service.serviceType}
               </Button>
             </Box>
@@ -99,7 +90,7 @@ export default function ControlledAccordions({ isLoggedIn, userType }) {
               <Button
                 variant="contained"
                 sx={{ mt: 2 }}
-                onClick={!isLoggedIn ? handleDialogOpen : undefined}
+                onClick={!isLoggedIn ? () => handleDialogOpen(<Login />) : undefined}
               >
                 {getButtonLabel()}
               </Button>
@@ -114,7 +105,7 @@ export default function ControlledAccordions({ isLoggedIn, userType }) {
         fullWidth
       >
         <DialogContent>
-          <Register />
+        {dialogContent}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose}>Close</Button>
@@ -123,3 +114,7 @@ export default function ControlledAccordions({ isLoggedIn, userType }) {
     </div>
   );
 }
+ControlledAccordions.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+  userType: PropTypes.string
+};

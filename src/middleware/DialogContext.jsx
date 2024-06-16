@@ -1,9 +1,9 @@
 import { createContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
-const DialogContext = createContext();
+export const DialogContext = createContext();
 
-const DialogProvider = ({ children }) => {
+export const DialogProvider = ({ children }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogContent, setDialogContent] = useState(null);
 
@@ -23,7 +23,7 @@ const DialogProvider = ({ children }) => {
     </DialogContext.Provider>
   );
 };
+
 DialogProvider.propTypes = {
-  children: PropTypes.node.isRequired // Define PropTypes para children
+  children: PropTypes.node.isRequired,
 };
-export { DialogProvider, DialogContext };
