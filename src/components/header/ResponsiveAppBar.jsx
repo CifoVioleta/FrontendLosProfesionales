@@ -1,20 +1,5 @@
-import React, { useState, useContext } from "react";
-import {
-  AppBar,
-  Box,
-  Toolbar,
-  IconButton,
-  Typography,
-  Menu,
-  MenuItem,
-  Button,
-  Tooltip,
-  Avatar,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  Container
-} from "@mui/material";
+import { useState, useContext } from "react";
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, MenuItem, Button, Tooltip, Avatar, Dialog, DialogActions, DialogContent, Container } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import AdbIcon from "@mui/icons-material/Adb";
 import Register from "./avatar/Register.jsx";
@@ -62,137 +47,31 @@ function ResponsiveAppBar({ onLogin }) {
   if (state.isLoggedIn) {
     if (state.userType === "Empleador") {
       settings = [
-        {
-          name: "Editar perfil",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">Editar perfil</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Solicitudes",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">Solicitudes</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Servicios",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">Servicios</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Historial",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">Historial</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Cerrar sesión",
-          component: (
-            <MenuItem
-              onClick={() => {
-                handleCloseUserMenu();
-                handleLogout();
-              }}
-            >
-              <Typography textAlign="center">Cerrar sesión</Typography>
-            </MenuItem>
-          ),
-        },
+        { name: "Editar perfil", component: "Editar perfil" },
+        { name: "Solicitudes", component: "Solicitudes" },
+        { name: "Servicios", component: "Servicios" },
+        { name: "Historial", component: "Historial" },
+        { name: "Cerrar sesión", component: "Cerrar sesión", action: handleLogout },
       ];
     } else if (state.userType === "Profesional") {
       settings = [
-        {
-          name: "Editar perfil",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">Editar perfil</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Solicitudes",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">Solicitudes</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Servicios",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">Servicios</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Proyectos",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">Proyectos</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Historial",
-          component: (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">Historial</Typography>
-            </MenuItem>
-          ),
-        },
-        {
-          name: "Cerrar sesión",
-          component: (
-            <MenuItem
-              onClick={() => {
-                handleCloseUserMenu();
-                handleLogout();
-              }}
-            >
-              <Typography textAlign="center">Cerrar sesión</Typography>
-            </MenuItem>
-          ),
-        },
+        { name: "Editar perfil", component: "Editar perfil" },
+        { name: "Solicitudes", component: "Solicitudes" },
+        { name: "Servicios", component: "Servicios" },
+        { name: "Proyectos", component: "Proyectos" },
+        { name: "Historial", component: "Historial" },
+        { name: "Cerrar sesión", component: "Cerrar sesión", action: handleLogout },
       ];
     }
   } else {
     settings = [
-      {
-        name: "Registrarse",
-        component: (
-          <MenuItem onClick={() => handleDialogOpen(<Register />)}>
-            <Typography textAlign="center">Registrarse</Typography>
-          </MenuItem>
-        ),
-      },
-      {
-        name: "Iniciar sesión",
-        component: (
-          <MenuItem
-            onClick={() => handleDialogOpen(<Login onLogin={handleLogin} />)}
-          >
-            <Typography textAlign="center">Iniciar sesión</Typography>
-          </MenuItem>
-        ),
-      },
+      { name: "Registrarse", component: "Registrarse", action: () => handleDialogOpen(<Register />) },
+      { name: "Iniciar sesión", component: "Iniciar sesión", action: () => handleDialogOpen(<Login onLogin={handleLogin} />) },
     ];
   }
 
   return (
-    <AppBar
-      position="static"
-      sx={{ backgroundColor: "transparent", boxShadow: "none" }}
-    >
+    <AppBar position="static" sx={{ backgroundColor: "transparent", boxShadow: "none" }}>
       <Container maxWidth="xl" sx={{ py: 2 }}>
         <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -215,33 +94,18 @@ function ResponsiveAppBar({ onLogin }) {
             PROFESIONALES
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
+            <IconButton size="large" aria-label="account of current user" aria-controls="menu-appbar" aria-haspopup="true" onClick={handleOpenNavMenu} color="inherit">
               <MenuIcon />
             </IconButton>
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
+              anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
               keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
+              transformOrigin={{ vertical: "top", horizontal: "left" }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
+              sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
@@ -272,11 +136,7 @@ function ResponsiveAppBar({ onLogin }) {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
+              <Button key={page} onClick={handleCloseNavMenu} sx={{ my: 2, color: "white", display: "block" }}>
                 {page}
               </Button>
             ))}
@@ -288,14 +148,7 @@ function ResponsiveAppBar({ onLogin }) {
               </IconButton>
             </Tooltip>
             {state.isLoggedIn && (
-              <Typography
-                variant="body2"
-                sx={{
-                  fontSize: { xs: "0.8rem", md: "1rem" },
-                  color: "white",
-                  ml: 1,
-                }}
-              >
+              <Typography variant="body2" sx={{ fontSize: { xs: "0.8rem", md: "1rem" }, color: "white", ml: 1 }}>
                 {state.nickname}
               </Typography>
             )}
@@ -303,22 +156,16 @@ function ResponsiveAppBar({ onLogin }) {
               sx={{ mt: "45px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
+              anchorOrigin={{ vertical: "top", horizontal: "right" }}
               keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
+              transformOrigin={{ vertical: "top", horizontal: "right" }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <React.Fragment key={setting.name}>
-                  {setting.component}
-                </React.Fragment>
+                <MenuItem key={setting.name} onClick={setting.action ? setting.action : handleCloseUserMenu}>
+                  <Typography textAlign="center">{setting.component}</Typography>
+                </MenuItem>
               ))}
             </Menu>
           </Box>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Accordion, AccordionSummary, AccordionDetails, Typography, Button } from '@mui/material';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Button } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -105,7 +105,7 @@ export default function ControlledAccordions({ isLoggedIn, userType }) {
         fullWidth
       >
         <DialogContent>
-        {dialogContent}
+          {dialogContent}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose}>Close</Button>
@@ -114,7 +114,13 @@ export default function ControlledAccordions({ isLoggedIn, userType }) {
     </div>
   );
 }
+
 ControlledAccordions.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
-  userType: PropTypes.string
+  userType: PropTypes.string.isRequired,
+};
+
+ControlledAccordions.defaultProps = {
+  isLoggedIn: false,
+  userType: '',
 };

@@ -13,18 +13,18 @@ const handleLogin = (userData) => {
 
 function App() {
   return (
-    <Router>
-      <UserProvider>
-        <DialogProvider>
+    <UserProvider>
+      <DialogProvider>
+        <Router>
           <ResponsiveAppBar onLogin={handleLogin} />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/user" element={<UserPage />} />
           </Routes>
-          <Footer/>
-        </DialogProvider>
-      </UserProvider>
-    </Router>
+          <Footer />
+        </Router>
+      </DialogProvider>
+    </UserProvider>
   );
 }
 

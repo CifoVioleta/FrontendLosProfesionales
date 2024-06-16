@@ -6,7 +6,8 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import FieldValidator from "./avatar/FieldValidator";
+import FieldValidator from "./avatar/FieldValidator.jsx";
+import PropTypes from "prop-types";
 
 const ServiceForm = ({ formData, handleChange, errors }) => {
   return (
@@ -59,6 +60,19 @@ const ServiceForm = ({ formData, handleChange, errors }) => {
       </Grid>
     </Grid>
   );
+};
+ServiceForm.propTypes = {
+  formData: PropTypes.shape({
+    serviceType: PropTypes.string.isRequired,
+    serviceName: PropTypes.string.isRequired,
+    serviceDescription: PropTypes.string.isRequired,
+  }).isRequired,
+  handleChange: PropTypes.func.isRequired,
+  errors: PropTypes.shape({
+    serviceType: PropTypes.string,
+    serviceName: PropTypes.string,
+    serviceDescription: PropTypes.string,
+  }).isRequired,
 };
 
 export default ServiceForm;

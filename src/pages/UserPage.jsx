@@ -1,19 +1,16 @@
-import { useParams } from "react-router-dom";
-import PropTypes from 'prop-types';
-import AuthNavTabs from '../components/main/navtabhome/AuthNavTabs';
+import { useContext } from "react";
+import { UserContext } from "../middleware/UserContext.jsx";
+import AuthNavTabs from '../components/main/navtabhome/AuthNavTabs.jsx';
 
-const UserPage = ({ userType }) => {
-  const { id } = useParams();
 
+const UserPage = () => {
+  const { state } = useContext(UserContext);
   return (
-    <div>
-      <AuthNavTabs selectedTab={id} userType={userType} />
-    </div>
+    <>
+      <AuthNavTabs userType={state.userType} />
+    </>
   );
 };
 
-UserPage.propTypes = {
-  userType: PropTypes.string.isRequired,
-};
 
 export default UserPage;

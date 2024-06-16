@@ -2,6 +2,7 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import BreadcrumbsComponent from "./BreadcrumbsComponent.jsx";
 import NavTabs from "./NavTabs.jsx";
+import PropTypes from "prop-types";
 
 function AuthNavTabs({ userType }) {
   const [currentTab, setCurrentTab] = useState("1");
@@ -14,6 +15,8 @@ function AuthNavTabs({ userType }) {
     </Box>
   );
 }
-
+AuthNavTabs.propTypes = {
+  userType: PropTypes.string.isRequired, // Asegúrate de que userType es una string y es requerida
+};
 
 export default AuthNavTabs;
