@@ -19,7 +19,7 @@ function App() {
           <ResponsiveAppBar onLogin={handleLogin} />
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/user" element={<UserPage />} />
+            <Route path="/user/:tab" element={<UserPage />} />
           </Routes>
           <Footer />
         </Router>

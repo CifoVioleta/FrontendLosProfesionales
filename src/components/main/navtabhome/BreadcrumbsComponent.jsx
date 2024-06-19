@@ -1,10 +1,11 @@
+import React from "react";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import { Box } from "@mui/material";
-import HomePage from "../../../pages/HomePage.jsx";
+import Box from "@mui/material/Box";
+import PropTypes from "prop-types";
 
-export default function BreadcrumbsComponent({ currentTab, submenuValue }) {
+function BreadcrumbsComponent({ currentTab, submenuValue }) {
   const breadcrumbNameMap = {
     1: "Editar perfil",
     2: "Solicitudes",
@@ -15,9 +16,9 @@ export default function BreadcrumbsComponent({ currentTab, submenuValue }) {
 
   return (
     <Box p={2}>
-    <Breadcrumbs aria-label="breadcrumb">
-    <Link underline="hover" color="inherit" href="/">
-          <HomePage/>
+      <Breadcrumbs aria-label="breadcrumb">
+        <Link underline="hover" color="inherit" href="/">
+          Home
         </Link>
         <Typography color="text.primary">
           {breadcrumbNameMap[currentTab]}
@@ -25,8 +26,14 @@ export default function BreadcrumbsComponent({ currentTab, submenuValue }) {
         {currentTab === "3" && submenuValue && (
           <Typography color="text.primary">{submenuValue}</Typography>
         )}
-    </Breadcrumbs>
+      </Breadcrumbs>
     </Box>
   );
 }
 
+BreadcrumbsComponent.propTypes = {
+  currentTab: PropTypes.string.isRequired,
+  submenuValue: PropTypes.string,
+};
+
+export default BreadcrumbsComponent;

@@ -1,79 +1,88 @@
+import { useState } from "react";
 import {
   Box,
-  Typography,
   Select,
   MenuItem,
   FormControl,
   InputLabel,
+  Typography,
+  Grid,
 } from "@mui/material";
-import RequestItem from "./RequestItem";
+import PropTypes from "prop-types";
+import RequestItem from "./RequestItem.jsx";
 
-const requests = [
-  {
-    profesional: "Profesional 1",
-    servicio: "Servicio",
-    fecha: "30-02-2024",
-    estado: "Rechazadas",
-  },
-  {
-    profesional: "Profesional 2",
-    servicio: "Servicio 1",
-    fecha: "20-03-2024",
-    estado: "Aceptadas",
-  },
-  {
-    profesional: "Profesional 3",
-    servicio: "Servicio 2",
-    fecha: "20-05-2024",
-    estado: "Pendiente",
-  },
-  // Agrega más solicitudes según sea necesario
-];
+const estadoLabels = {
+  todas: "Solicitudes",
+  pendientes: "Solicitudes Pendientes",
+  aprobadas: "Solicitudes Aprobadas",
+  rechazadas: "Solicitudes Rechazadas",
+};
 
-export default function RequestList() {
-  const [filter, setFilter] = useState("Todos");
+const RequestList = ({ requests, usuarioEsProfesional }) => {
+  const [filtro, setFiltro] = useState("todas");
 
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value);
-  };
-
-  const filteredSolicitudes = requests.filter((solicitud) => {
-    if (filter === "Todos") return true;
-    return solicitud.estado === filter;
+  const filteredRequests = requests.filter((request) => {
+    if (filtro === "todas") return true;
+    return request.estado === filtro;
   });
 
+  const handleEliminarSolicitud = (id) => {
+    // Función para manejar la eliminación de la solicitud
+    console.log(`Eliminar solicitud con ID: ${id}`);
+  };
+
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h6" gutterBottom>
-        Servicios solicitados
-      </Typography>
-      <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel id="filter-label">Filtrar</InputLabel>
-        <Select
-          labelId="filter-label"
-          id="filter"
-          value={filter}
-          label="Filtrar"
-          onChange={handleFilterChange}
-        >
-          <MenuItem value="Todos">Todos</MenuItem>
-          <MenuItem value="Aceptadas">Aceptadas</MenuItem>
-          <MenuItem value="Rechazadas">Rechazadas</MenuItem>
-          <MenuItem value="Pendiente">Pendientes de aprobación</MenuItem>
-        </Select>
-      </FormControl>
-      {filteredSolicitudes.map((solicitud, index) => {
-        return (
+    <Box>
+      <Grid
+        container
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ mb: 5 }}
+      >
+        <Grid item>
+          <Typography variant="h6">{estadoLabels[filtro]}</Typography>
+        </Grid>
+        <Grid item>
+          <FormControl sx={{ minWidth: 200 }}>
+            <InputLabel id="filtro-label">Filtrar por estado</InputLabel>
+            <Select
+              labelId="filtro-label"
+              value={filtro}
+              onChange={(e) => setFiltro(e.target.value)}
+              label="Filtrar por estado"
+            >
+              <MenuItem value="todas">Todas</MenuItem>
+              <MenuItem value="pendientes">Pendientes</MenuItem>
+              <MenuItem value="aprobadas">Aprobadas</MenuItem>
+              <MenuItem value="rechazadas">Rechazadas</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
+      <Box sx={{ mt: 2 }}>
+        {filteredRequests.map((request, index) => (
           <RequestItem
             key={index}
-            profesional={solicitud.profesional}
-            servicio={solicitud.servicio}
-            fecha={solicitud.fecha}
-            estado={solicitud.estado}
-            usuarioEsProfesional={true} // Aquí ajusta según tu lógica de autenticación
+            {...request}
+            handleEliminarSolicitud={() => handleEliminarSolicitud(request.id)}
           />
-        );
-      })}
+        ))}
+      </Box>
     </Box>
   );
-}
+};
+
+RequestList.propTypes = {
+  requests: PropTypes.arrayOf(
+    PropTypes.shape({
+      profesional: PropTypes.string.isRequired,
+      servicio: PropTypes.string.isRequired,
+      fecha: PropTypes.string.isRequired,
+      estado: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
+  usuarioEsProfesional: PropTypes.bool.isRequired,
+};
+
+export default RequestList;

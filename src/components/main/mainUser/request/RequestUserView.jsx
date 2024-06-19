@@ -1,19 +1,40 @@
-import { Container, Box } from "@mui/material";
 import RequestList from "./RequestList.jsx";
+import PropTypes from "prop-types";
 
-export default function RequestUserView() {
+const RequestUserView = ({ usuarioEsProfesional }) => {
+  const requests = [
+    {
+      id: 1,
+      profesional: "John Doe",
+      servicio: "Desarrollo Web",
+      fecha: "2023-06-01",
+      estado: "pendientes",
+    },
+    {
+      id: 2,
+      profesional: "Jane Smith",
+      servicio: "Diseño Gráfico",
+      fecha: "2023-06-10",
+      estado: "aprobadas",
+    },
+    {
+      id: 3,
+      profesional: "Carlos Ruiz",
+      servicio: "Consultoría IT",
+      fecha: "2023-06-15",
+      estado: "rechazadas",
+    },
+  ];
+
   return (
-    <Container>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          mt: 3,
-        }}
-      >
-        <RequestList />
-      </Box>
-    </Container>
+    <RequestList
+      requests={requests}
+      usuarioEsProfesional={usuarioEsProfesional}
+    />
   );
-}
+};
+RequestUserView.propTypes = {
+  usuarioEsProfesional: PropTypes.bool.isRequired,
+};
+
+export default RequestUserView;

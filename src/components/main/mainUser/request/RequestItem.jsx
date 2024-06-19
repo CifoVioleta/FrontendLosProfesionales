@@ -1,31 +1,20 @@
 import { Box, Typography, Button, Avatar, Grid, Checkbox } from "@mui/material";
+import PropTypes from "prop-types";
 
-export default function RequestItem({
+const estadoColors = {
+  Pendiente: "#ff9800",
+  Aprobado: "#4caf50",
+  Rechazado: "#f44336",
+  Eliminar: "#000000",
+};
+
+const RequestItem = ({
   profesional,
   servicio,
   fecha,
   estado,
-  usuarioEsProfesional,
-}) {
-  const estadoColors = {
-    Aceptadas: "green",
-    Rechazadas: "magenta",
-    Pendiente: "blue",
-    Eliminar: "red",
-  };
-
-  const handleEliminarSolicitud = () => {
-    // Lógica para eliminar solicitud
-  };
-
-  const handleAceptarSolicitud = () => {
-    // Lógica para aceptar solicitud
-  };
-
-  const handleRechazarSolicitud = () => {
-    // Lógica para rechazar solicitud
-  };
-
+  handleEliminarSolicitud,
+}) => {
   return (
     <Box sx={{ border: "1px solid #ccc", borderRadius: 2, p: 2, mb: 2 }}>
       <Grid container spacing={2} alignItems="center">
@@ -64,4 +53,14 @@ export default function RequestItem({
       </Grid>
     </Box>
   );
-}
+};
+
+RequestItem.propTypes = {
+  profesional: PropTypes.string.isRequired,
+  servicio: PropTypes.string.isRequired,
+  fecha: PropTypes.string.isRequired,
+  estado: PropTypes.string.isRequired,
+  handleEliminarSolicitud: PropTypes.func.isRequired,
+};
+
+export default RequestItem;
