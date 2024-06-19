@@ -6,22 +6,32 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import EditProfile from "../mainUser/editProfile/EditProfile";
-import Projects from "../mainUser/projects/Projects";
-import RecordUser from "../mainUser/record/RecordUser";
-import RequestUserView from "../mainUser/request/RequestUserView";
-import ServicesEmploye from "../mainUser/services/ServicesEmploye";
-import ServicesProfessional from "../mainUser/services/SevicesProfessional";
+import PropTypes from "prop-types";
 
+import EditProfile from "../mainUser/editProfile/EditProfile.jsx";
+import Projects from "../mainUser/projects/Projects.jsx";
+import RecordUser from "../mainUser/record/RecordUser.jsx";
+import RequestUserView from "../mainUser/request/RequestUserView.jsx";
+import ServicesEmploye from "../mainUser/services/ServicesEmploye.jsx";
+import ServicesProfessional from "../mainUser/services/SevicesProfessional.jsx";
 
-export default function LabTabs({ userRole, setCurrentTab, setSubmenuValue }) {
-  const [value, setValue] = React.useState("1");
+export default function NavTabs({
+  userRole,
+  currentTab,
+  setCurrentTab,
+  setSubmenuValue,
+}) {
+  const [value, setValue] = React.useState(currentTab || "1");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [submenuValue, setSubmenuValueLocal] = React.useState("Todos");
 
+  React.useEffect(() => {
+    setValue(currentTab);
+  }, [currentTab]);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    setCurrentTab(newValue); // Actualiza el estado del tab seleccionado en AuthNavTabs
+    setCurrentTab(newValue);
   };
 
   const handleMenuOpen = (event) => {
@@ -65,7 +75,13 @@ export default function LabTabs({ userRole, setCurrentTab, setSubmenuValue }) {
             <TabList onChange={handleChange} aria-label="lab API tabs">
               <Tab label="Editar perfil" value="1" />
               <Tab label="Solicitudes" value="2" />
-              <Tab label="Servicios" value="3" aria-controls="servicios-menu" aria-haspopup="true" onClick={handleMenuOpen} />
+              <Tab
+                label="Servicios"
+                value="3"
+                aria-controls="servicios-menu"
+                aria-haspopup="true"
+                onClick={handleMenuOpen}
+              />
               <Tab label="Proyectos" value="4" />
               <Tab label="Historial" value="5" />
             </TabList>
@@ -80,12 +96,12 @@ export default function LabTabs({ userRole, setCurrentTab, setSubmenuValue }) {
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            {userRole === "empleador"
+            {userRole === "Empleador"
               ? renderEmpleadorTabs()
               : renderProfesionalTabs()}
           </TabList>
         </Box>
-        {userRole === "empleador" ? (
+        {userRole === "Empleador" ? (
           <>
             <TabPanel value="1">
               <EditProfile />
@@ -141,3 +157,10 @@ export default function LabTabs({ userRole, setCurrentTab, setSubmenuValue }) {
     </Box>
   );
 }
+
+NavTabs.propTypes = {
+  userRole: PropTypes.string.isRequired,
+  currentTab: PropTypes.string.isRequired,
+  setCurrentTab: PropTypes.func.isRequired,
+  setSubmenuValue: PropTypes.func.isRequired,
+};

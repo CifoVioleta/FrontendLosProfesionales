@@ -1,5 +1,11 @@
-import * as React from "react";
-import { Accordion, AccordionSummary, AccordionDetails, Typography, Button } from "@mui/material";
+import React, { useState, useContext } from "react";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  Button,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -7,11 +13,11 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import Login from "../header/avatar/Login.jsx";
-import { DialogContext } from "../../middleware/DialogContext";
+import { DialogContext } from "../../middleware/DialogContext.jsx";
 import PropTypes from "prop-types";
 
-// Mock data (esto se reemplazará con datos del backend)
 const services = [
+  // Mock data (esto se reemplazará con datos del backend)
   {
     id: 1,
     avatar: "/static/images/avatar/1.jpg",
@@ -39,8 +45,9 @@ const services = [
 ];
 
 export default function ControlledAccordions({ isLoggedIn, userType }) {
-  const [expanded, setExpanded] = React.useState(false);
-  const { openDialog, dialogContent, handleDialogOpen, handleDialogClose } = React.useContext(DialogContext);
+  const [expanded, setExpanded] = useState(false);
+  const { openDialog, dialogContent, handleDialogOpen, handleDialogClose } =
+    useContext(DialogContext);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -66,8 +73,19 @@ export default function ControlledAccordions({ isLoggedIn, userType }) {
             id={`panel${index}bh-header`}
           >
             <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
-              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mr: 2 }}>
-                <Avatar alt={service.nickname} src={service.avatar} sx={{ mb: 1 }} />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  mr: 2,
+                }}
+              >
+                <Avatar
+                  alt={service.nickname}
+                  src={service.avatar}
+                  sx={{ mb: 1 }}
+                />
                 <Typography sx={{ color: "text.secondary" }}>
                   {service.nickname}
                 </Typography>
@@ -83,14 +101,14 @@ export default function ControlledAccordions({ isLoggedIn, userType }) {
             </Box>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
-              {service.description}
-            </Typography>
+            <Typography>{service.description}</Typography>
             {getButtonLabel() && (
               <Button
                 variant="contained"
                 sx={{ mt: 2 }}
-                onClick={!isLoggedIn ? () => handleDialogOpen(<Login />) : undefined}
+                onClick={
+                  !isLoggedIn ? () => handleDialogOpen(<Login />) : undefined
+                }
               >
                 {getButtonLabel()}
               </Button>
@@ -104,9 +122,7 @@ export default function ControlledAccordions({ isLoggedIn, userType }) {
         maxWidth="xs"
         fullWidth
       >
-        <DialogContent>
-          {dialogContent}
-        </DialogContent>
+        <DialogContent>{dialogContent}</DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose}>Close</Button>
         </DialogActions>
@@ -118,9 +134,4 @@ export default function ControlledAccordions({ isLoggedIn, userType }) {
 ControlledAccordions.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
   userType: PropTypes.string.isRequired,
-};
-
-ControlledAccordions.defaultProps = {
-  isLoggedIn: false,
-  userType: '',
 };
