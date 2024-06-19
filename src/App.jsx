@@ -1,39 +1,31 @@
-
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Container from '@mui/material/Container';
 import ResponsiveAppBar from "./components/header/ResponsiveAppBar.jsx";
-import AvatarCarrousel from "./components/main/carrouselAvatar/AvatarCarrousel.jsx";
-import ButtonsSections from "./components/main/ButtonsSections.jsx";
-import Slider from "./components/main/slider/Slider.jsx";
-import EngagementSection from "./components/main/EngagementSection.jsx";
 import Footer from "./components/footer/Footer.jsx";
-import ControlledAccordions from "./components/main/ControlledAccordions.jsx";
-
+import { UserProvider } from "./middleware/UserContext.jsx";
 import { DialogProvider } from "./middleware/DialogContext.jsx";
+import HomePage from "./pages/HomePage.jsx";
+import UserPage from "./pages/UserPage.jsx";
 
-const App = () => {
-  return (
-    <Router>
-      <DialogProvider>
-      <ResponsiveAppBar />
-      <Container>
-      <Routes>
-      <Route path="/" element={
-            <>
-              <Slider/>
-              <EngagementSection />
-              <ButtonsSections />
-              <ControlledAccordions/>
-              <AvatarCarrousel />
-            </>
-          } />
-          {/* Agrega más rutas para diferentes páginas */}
-        </Routes>
-      </Container>
-      </DialogProvider>
-      <Footer />
-    </Router>
-  );
+// Define la función onLogin
+const handleLogin = (userData) => {
+  console.log("User logged in", userData);
 };
+
+function App() {
+  return (
+    <UserProvider>
+      <DialogProvider>
+        <Router>
+          <ResponsiveAppBar onLogin={handleLogin} />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/user" element={<UserPage />} />
+          </Routes>
+          <Footer />
+        </Router>
+      </DialogProvider>
+    </UserProvider>
+  );
+}
 
 export default App;
