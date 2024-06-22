@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   Avatar,
   Button,
@@ -17,10 +17,12 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 //import ErrorMessage from "./ErrorMessage.jsx";
 import FieldValidator from "./FieldValidator.jsx";
 import ServiceForm from "../ServiceForm.jsx";
+import axios from "../../../services/axiosConfig.js";
+import { UserContext } from "../../../middleware/UserContext.jsx";
 
 const theme = createTheme();
 
-export default function Register() {
+const Register = ({ switchToLogin }) => {
   const [userType, setUserType] = useState("");
   const [formData, setFormData] = useState({
     nombre: "",
@@ -37,6 +39,7 @@ export default function Register() {
     serviceDescription: "",
   });
   const [errors, setErrors] = useState({});
+  const { dispatch } = useContext(UserContext);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -54,11 +57,17 @@ export default function Register() {
     setErrors({});
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const validationErrors = validateForm(formData);
     if (Object.keys(validationErrors).length === 0) {
-      console.log(formData);
+      try {
+        const response = await axios.post("/register", formData);
+        dispatch({ type: 'LOGIN', payload: response.data });
+        switchToLogin();
+      } catch (err) {
+        setErrors({ ...errors, apiError: "Error al registrarse" });
+      }
     } else {
       setErrors(validationErrors);
     }
@@ -278,6 +287,13 @@ export default function Register() {
                 >
                   Registrarse
                 </Button>
+                <Grid container justifyContent="flex-end">
+                  <Grid item>
+                    <Link href="#" variant="body2" onClick={switchToLogin}>
+                      ¿Ya tienes una cuenta? Inicia sesión
+                    </Link>
+                  </Grid>
+                </Grid>
               </>
             )}
           </Box>
@@ -286,3 +302,4 @@ export default function Register() {
     </ThemeProvider>
   );
 }
+export default Register;

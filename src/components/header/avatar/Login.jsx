@@ -1,3 +1,4 @@
+import { useState, useContext } from "react";
 import {
   Avatar, 
   Button, 
@@ -12,18 +13,27 @@ import {
   Container, } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { UserContext } from "../../../middleware/UserContext.jsx"; // Importar el contexto del usuario
+import axios from "../../../services/axiosConfig.js";
 
 const theme = createTheme();
 
-export default function Login({ onLogin }) {
-  const handleSubmit = (event) => {
+export default function Login({ switchToRegister }) {
+  const [error, setError] = useState(null);
+  const { dispatch } = useContext(UserContext);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get("email");
     const password = data.get("password");
 
-    // Aquí la lógica de autenticación
-    onLogin("Profesional", "Usuario123");
+    try {
+      const response = await axios.post("/login", { email, password });
+      dispatch({ type: 'LOGIN', payload: response.data });
+    } catch (err) {
+      setError("Login failed. Please check your email and password.");
+    }
   };
 
   return (
@@ -44,6 +54,7 @@ export default function Login({ onLogin }) {
           <Typography component="h1" variant="h5">
             Iniciar sesión
           </Typography>
+          {error && <Typography color="error">{error}</Typography>}
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -89,7 +100,7 @@ export default function Login({ onLogin }) {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="#" variant="body2" onClick={switchToRegister}>
                   {"¿No tienes una cuenta? Regístrate"}
                 </Link>
               </Grid>
