@@ -16,7 +16,7 @@ function App() {
 
   const handleLogin = (userType, nickname) => {
     console.log("User logged in:", userType, nickname);
-    // Aquí puedes manejar el estado del usuario
+    // Maneja el estado del usuario
   };
 
   return (

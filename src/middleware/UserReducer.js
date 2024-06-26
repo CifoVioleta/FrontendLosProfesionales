@@ -2,7 +2,7 @@ export const initialState = {
   isLoggedIn: false,
   userType: null,
   nickname: null,
-  // Otros datos del usuario que necesites
+  // Otros datos del usuario que se necesiten
 };
 
 export const userReducer = (state, action) => {
@@ -13,7 +13,7 @@ export const userReducer = (state, action) => {
         isLoggedIn: true,
         userType: action.payload.userType,
         nickname: action.payload.nickname,
-        // Otros datos del usuario que necesites
+        // Otros datos del usuario que se necesiten
       };
     case 'LOGOUT':
       return {

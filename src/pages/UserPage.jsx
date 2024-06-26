@@ -6,8 +6,8 @@ import PropTypes from "prop-types";
 
 const UserPage = () => {
   const { state } = useContext(UserContext);
-  const { tab } = useParams(); // Obtener la pestaña de la URL
-  const location = useLocation(); // Obtener la ubicación para manejar submenú
+  const { tab } = useParams(); // Obtienela pestaña de la URL
+  const location = useLocation(); // Obtiene la ubicación para manejar submenú
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { createContext, useReducer } from "react";
 import PropTypes from "prop-types";
-import { initialState, userReducer } from "./UserReducer.js";  // Importar desde el nuevo archivo
+import { initialState, userReducer } from "./UserReducer.js";
 
 export const UserContext = createContext();
 
